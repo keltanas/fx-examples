@@ -6,13 +6,13 @@ User Fx Examples
 Issue with panic
 
 ```shell
-make interface0
+go run cmd/interface0/main.go
 ```
 
 Decision 1
 
 ```shell
-make interface1
+go run cmd/interface1/main.go
 
 [Fx] PROVIDE    *zap.Logger <= go.uber.org/zap.NewDevelopment()
 [Fx] PROVIDE    *foo.Foo <= github.com/keltanas/fx-examples/internal/pkg/foo.New()
@@ -33,7 +33,7 @@ make interface1
 Decision 2
 
 ```shell
-make interface2
+go run cmd/interface2/main.go
 
 [Fx] PROVIDE    *zap.Logger <= go.uber.org/zap.NewDevelopment()
 [Fx] PROVIDE    *foo.Foo <= github.com/keltanas/fx-examples/internal/pkg/foo.New()
@@ -54,7 +54,7 @@ make interface2
 Decision 3
 
 ```shell
-make interface3
+go run cmd/interface3/main.go
 
 [Fx] PROVIDE    *zap.Logger <= go.uber.org/zap.NewDevelopment()
 [Fx] PROVIDE    baz.FooDoer <= fx.Annotate(github.com/keltanas/fx-examples/internal/pkg/foo.New(), fx.As([[baz.FooDoer]])
