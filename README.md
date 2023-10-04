@@ -3,13 +3,41 @@ User Fx Examples
 
 ## Interfaces
 
-Issue with panic
+### Issue with error
+
+```go
+_ = fx.New(
+    fx.Provide(zap.NewDevelopment),
+    fx.Provide(foo.New),
+    fx.Provide(baz.New),
+    fx.Provide(bar.New),
+    fx.Populate(&b),
+)
+```
 
 ```shell
 go run cmd/interface0/main.go
 ```
 
-Decision 1
+### Decision 1
+
+```go
+_ = fx.New(
+    fx.Provide(zap.NewDevelopment),
+    fx.Provide(foo.New),
+    fx.Provide(
+        func(f *foo.Foo) *baz.Baz {
+            return baz.New(f)
+        },
+    ),
+    fx.Provide(
+        func(b *baz.Baz) *bar.Bar {
+            return bar.New(b)
+        },
+    ),
+    fx.Populate(&b),
+)
+```
 
 ```shell
 go run cmd/interface1/main.go
@@ -30,7 +58,19 @@ go run cmd/interface1/main.go
 2023-10-04T17:50:12.977+0300    INFO    foo/foo.go:18   DoFoo
 ```
 
-Decision 2
+### Decision 2
+
+> It's more preferred
+
+```go
+_ = fx.New(
+    fx.Provide(zap.NewDevelopment),
+    fx.Provide(foo.New),
+    fx.Provide(fx.Annotate(baz.New, fx.From(new(*foo.Foo)))),
+    fx.Provide(fx.Annotate(bar.New, fx.From(new(*baz.Baz)))),
+    fx.Populate(&b),
+)
+```
 
 ```shell
 go run cmd/interface2/main.go
@@ -51,7 +91,17 @@ go run cmd/interface2/main.go
 2023-10-04T17:50:27.753+0300    INFO    foo/foo.go:18   DoFoo
 ```
 
-Decision 3
+### Decision 3
+
+```go
+_ = fx.New(
+    fx.Provide(zap.NewDevelopment),
+    fx.Provide(fx.Annotate(foo.New, fx.As(new(baz.FooDoer)))),
+    fx.Provide(fx.Annotate(baz.New, fx.As(new(bar.BazDoer)))),
+    fx.Provide(bar.New),
+    fx.Populate(&b),
+)
+```
 
 ```shell
 go run cmd/interface3/main.go

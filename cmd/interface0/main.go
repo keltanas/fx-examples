@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"go.uber.org/fx"
@@ -12,7 +13,7 @@ import (
 	"github.com/keltanas/fx-examples/internal/pkg/foo"
 )
 
-// It will panic
+// It is error
 func main() {
 	var b *bar.Bar
 	app := fx.New(
@@ -27,12 +28,12 @@ func main() {
 	defer cancel()
 
 	if err := app.Start(ctx); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	defer func() {
 		if err := app.Stop(ctx); err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}()
 

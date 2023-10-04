@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"go.uber.org/fx"
@@ -35,12 +36,12 @@ func main() {
 	defer cancel()
 
 	if err := app.Start(ctx); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	defer func() {
 		if err := app.Stop(ctx); err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}()
 
